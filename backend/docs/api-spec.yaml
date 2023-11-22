@@ -1,0 +1,46 @@
+openapi: "3.0.3"
+info:
+  title: Restful API Documentation for Mining Vehicle Rental Application
+  version: "1"
+  contact:
+    name: Arzaqul Mughny Al Fawwaz
+    email: zaarza@gmail.com
+    url: arza.vercel.app
+servers:
+  - url: https://localhost:8000/api
+    description: Development
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: X-XSRF-TOKEN
+paths:
+  /login:
+    post:
+      tags:
+        - Authorization
+      responses:
+        204:
+          description: Login success
+          headers:
+            Set-Cookie:
+              schema:
+                type: string
+                example: 12345678
+        401:
+          description: Invalid credentials
+          headers:
+            Set-Cookie:
+              schema:
+                type: string
+                example: 12345678
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                example:
+                  message: Invalid credentials
