@@ -16,7 +16,7 @@ services:
         entrypoint: yarn dev
     be-mvr:
         container_name: be-mvr
-        image: 8.2-fpm-alpine
+        image: php:8.2-fpm
         build: ./backend
         ports:
             - 8000:8000

@@ -1,4 +1,4 @@
-FROM  8.2-fpm-alpine
+FROM php:8.2-fpm
 COPY . /app
 RUN apt-get update && apt-get install -y \
         libfreetype6-dev \
