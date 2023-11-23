@@ -2,8 +2,15 @@ export const TableData = ({ children }: { children: React.ReactNode }) => {
     return <td className='px-3 py-2'>{children}</td>;
 };
 
-export const TableRow = ({ children }: { children: React.ReactNode }) => {
-    return <tr className='border-b border-b-black/10'>{children}</tr>;
+export const TableRow = ({ children, onClick }: { children: React.ReactNode; onClick?: () => void }) => {
+    return (
+        <tr
+            className='border-b border-b-black/10 cursor-pointer'
+            onClick={() => (onClick ? onClick() : {})}
+        >
+            {children}
+        </tr>
+    );
 };
 
 export const TableHead = ({ children }: { children: React.ReactNode }) => {
