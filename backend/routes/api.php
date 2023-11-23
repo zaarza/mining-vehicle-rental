@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VehicleController;
+use App\Http\Controllers\VehicleOrderController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -26,5 +28,11 @@ Route::middleware('auth:sanctum')->group(function() {
       Route::post('/vehicles', 'post');
       Route::delete('/vehicles/{id}', 'delete');
       Route::put('/vehicles/{id}', 'put');
+  });
+
+  Route::controller(VehicleOrderController::class)->group(function () {
+    Route::get('/orders/{id?}', 'get');
+    Route::post('/orders', 'post');
+    Route::put('/orders/{id}', 'put');
   });
 });

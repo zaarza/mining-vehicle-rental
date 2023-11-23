@@ -11,6 +11,37 @@ servers:
     description: Development
 components:
   schemas:
+    orderUpdate:
+      type: object
+      properties:
+        driver:
+          type: string
+        admin_id:
+          type: string
+        company:
+          type: string
+        vehicle_id:
+          type: string
+    order:
+      type: object
+      properties:
+        id:
+          type: string
+        driver:
+          type: string
+        company:
+          type: string
+        admin_id:
+          type: string
+        vehicle_id:
+          type: string
+        is_approved:
+          type: boolean
+          nullable: true
+        created_at:
+          type: number
+        updated_at:
+          type: number
     vehicleUpdate:
       type: object
       properties:
@@ -215,3 +246,87 @@ paths:
       responses:
         204:
           description: Success
+  /orders:
+    get:
+      tags:
+        - Orders
+      summary: Get orders
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: number
+                  per_page:
+                    type: number
+                  current_page:
+                    type: number
+                  last_page:
+                    type: number
+                  first_page_url:
+                    type: string
+                  last_page_url:
+                    type: string
+                  next_page_url:
+                    type: string
+                  prev_page_url:
+                    type: string
+                  path:
+                    type: string
+                  from:
+                    type: number
+                  to:
+                    type: number
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/order"
+    post:
+      summary: Add new order
+      tags:
+        - Orders
+      responses:
+        201:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/order"
+  /orders/{id}:
+    parameters:
+      - in: query
+        name: id
+        required: true
+        schema:
+          type: string
+          nullable: false
+    put:
+      tags:
+        - Orders
+      summary: Update order information
+      parameters:
+        - in: header
+          name: content-type
+          required: true
+          schema:
+            type: string
+          example: x-www-form-urlencoded
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "#/components/schemas/orderUpdate"
+      responses:
+        200:
+          description: Succes
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/order"
