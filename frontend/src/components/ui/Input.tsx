@@ -12,12 +12,15 @@ export const Label = (props: { htmlFor: string; label: string; children: JSX.Ele
     );
 };
 
-export const Input = (props: React.InputHTMLAttributes<HTMLInputElement>) => {
-    const { ...attributes } = props;
+interface IINputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+    className?: string;
+}
+export const Input = (props: IINputProps) => {
+    const { className, ...attributes } = props;
     return (
         <input
             {...attributes}
-            className='bg-transparent border text-sm border-black/10 rounded-md px-5 py-3 text-neutral-800 '
+            className={`bg-transparent border text-sm border-black/10 rounded-md px-5 py-3 text-neutral-800 ${className}`}
         />
     );
 };
