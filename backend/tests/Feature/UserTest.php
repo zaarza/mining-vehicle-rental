@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -24,18 +25,26 @@ class UserTest extends TestCase
      */
     public function test_login(): void
     {
+        $user = User::create([
+            'name' => "admin0",
+            'username' => "admin0",
+            'password' => "password",
+            'role_id' => 1
+        ]);
+
         $token = $this->get('/sanctum/csrf-cookie')->getCookie("XSRF-TOKEN")->getValue();
         $this->assertNotNull($token);
 
         $response = $this->post('/api/login', [
-            'username' => 'admin01',
-            'password' => 'admin01'
+            'username' => $user->username,
+            'password' => 'password'
         ], [
             'accept' => 'application/json',
             'X-XSRF-TOKEN' => $token,
         ]);
 
         $response->assertStatus(204);
+        $user->delete();
     }
 
     /**

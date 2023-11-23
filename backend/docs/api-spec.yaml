@@ -10,6 +10,35 @@ servers:
   - url: https://localhost:8000/api
     description: Development
 components:
+  schemas:
+    vehicleUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+        brand:
+          type: string
+        company:
+          type: string
+        category_id:
+          type: number
+        fuel_usage_per_hour:
+          type: number
+    vehicle:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        owner:
+          type: string
+        brand:
+          type: string
+        created_at:
+          type: number
+        updated_at:
+          type: number
   securitySchemes:
     cookieAuth:
       type: apiKey
@@ -23,18 +52,8 @@ paths:
       responses:
         204:
           description: Login success
-          headers:
-            Set-Cookie:
-              schema:
-                type: string
-                example: 12345678
         401:
           description: Invalid credentials
-          headers:
-            Set-Cookie:
-              schema:
-                type: string
-                example: 12345678
           content:
             application/json:
               schema:
@@ -44,3 +63,155 @@ paths:
                     type: string
                 example:
                   message: Invalid credentials
+  /vehicles:
+    get:
+      summary: Get vehicles
+      tags:
+        - Vehicles
+      parameters:
+        - in: query
+          name: category
+          schema:
+            type: string
+            nullable: true
+          required: false
+        - in: query
+          name: company
+          schema:
+            type: string
+            nullable: true
+          required: false
+        - in: query
+          name: search
+          schema:
+            type: string
+            nullable: true
+          required: false
+        - in: query
+          name: brand
+          schema:
+            type: string
+            nullable: true
+          required: false
+        - in: query
+          name: page
+          schema:
+            type: number
+            nullable: false
+          required: false
+      security:
+        - cookieAuth: []
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: number
+                  per_page:
+                    type: number
+                  current_page:
+                    type: number
+                  last_page:
+                    type: number
+                  first_page_url:
+                    type: string
+                  last_page_url:
+                    type: string
+                  next_page_url:
+                    type: string
+                  prev_page_url:
+                    type: string
+                  path:
+                    type: string
+                  from:
+                    type: number
+                  to:
+                    type: number
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/vehicle"
+    post:
+      summary: Add new vehicle
+      tags:
+        - Vehicles
+      description: Add new vehicle
+      security:
+        - cookieAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "#/components/schemas/vehicleUpdate"
+      responses:
+        201:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/vehicle"
+  /vehicles/{id}:
+    get:
+      summary: Get specific vehicle
+      tags:
+        - Vehicles
+      parameters:
+        - in: path
+          required: true
+          schema:
+            type: string
+          name: id
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/vehicle"
+        404:
+          description: Not found
+
+    put:
+      summary: Update vehicle information
+      tags:
+        - Vehicles
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: content-type
+          required: true
+          schema:
+            type: string
+          example: x-www-form-urlencoded
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "#/components/schemas/vehicleUpdate"
+      responses:
+        204:
+          description: Success
+    delete:
+      summary: Delete vehicle
+      tags:
+        - Vehicles
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        204:
+          description: Success
